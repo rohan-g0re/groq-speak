@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply bg-white text-bmw-dark font-sans;
+    line-height: 1.6;
+  }
+}
+
+@layer components {
+  .bmw-input {
+    @apply w-full px-4 py-3 border border-bmw-border rounded-lg focus:outline-none focus:ring-2 focus:ring-bmw-blue focus:border-transparent transition-all duration-200;
+  }
+  
+  .bmw-button {
+    @apply px-6 py-3 bg-bmw-dark text-white rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-bmw-blue focus:ring-offset-2 transition-all duration-200 font-medium;
+  }
+  
+  .bmw-button-secondary {
+    @apply px-6 py-3 bg-white text-bmw-dark border border-bmw-border rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-bmw-blue focus:ring-offset-2 transition-all duration-200 font-medium;
+  }
+  
+  .bmw-card {
+    @apply bg-white border border-bmw-border rounded-xl shadow-bmw;
+  }
+  
+  .bmw-switch {
+    @apply relative inline-flex items-center cursor-pointer;
+  }
+}
