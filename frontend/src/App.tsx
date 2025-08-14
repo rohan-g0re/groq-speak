@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SearchForm } from './components/SearchForm';
 import { DefinitionCard } from './components/DefinitionCard';
 import { dictionaryApi } from './services/api';
