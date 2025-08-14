@@ -14,7 +14,12 @@ app = FastAPI(title="AI Dictionary API", version="1.0.0")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],  # React dev servers
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://localhost:5173",
+        "https://*.vercel.app",  # Allow all Vercel preview deployments
+        "https://your-app-name.vercel.app"  # Replace with your actual Vercel domain
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

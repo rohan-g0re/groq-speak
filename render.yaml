@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ai-dictionary-backend
+    env: python
+    plan: free
+    buildCommand: pip install uv && uv sync && uv add -r requirements.txt
+    startCommand: uv run uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
