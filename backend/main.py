@@ -18,7 +18,7 @@ app.add_middleware(
         "http://localhost:3000", 
         "http://localhost:5173",
         "https://*.vercel.app",  # Allow all Vercel preview deployments
-        "https://your-app-name.vercel.app"  # Replace with your actual Vercel domain
+        "https://groq-speak.vercel.app"  # Your specific Vercel domain
     ],
     allow_credentials=True,
     allow_methods=["*"],
