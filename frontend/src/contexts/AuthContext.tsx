@@ -51,22 +51,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     })
 
-    if (!error && data.user) {
-      // Create user profile
-      const { error: profileError } = await supabase
-        .from('user_profiles')
-        .insert({
-          id: data.user.id,
-          username: username,
-          email: email,
-        })
-
-      if (profileError) {
-        console.error('Error creating profile:', profileError)
-        // If profile creation fails, we should handle this gracefully
-        // For now, we'll just log it
-      }
-    }
+    // Profile creation moved to backend - will be handled automatically
+    // when user first authenticates with the API
 
     return { error }
   }

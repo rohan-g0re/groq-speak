@@ -16,6 +16,12 @@ interface Subscription {
   end_date: string
 }
 
+interface SubscriptionData {
+  status: string
+  end_date: string
+  subscription_plans: Array<{ name: string }>
+}
+
 export function Dashboard() {
   const { user } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
@@ -39,23 +45,31 @@ export function Dashboard() {
         }
 
         // Fetch subscription info
-        const { data: subscriptionData } = await supabase
-          .from('user_subscriptions')
-          .select(`
-            status,
-            end_date,
-            subscription_plans(name)
-          `)
-          .eq('user_id', user.id)
-          .eq('status', 'active')
-          .single()
+        try {
+          const { data: subscriptionData, error: subscriptionError } = await supabase
+            .from('user_subscriptions')
+            .select(`
+              status,
+              end_date,
+              subscription_plans(name)
+            `)
+            .eq('user_id', user.id)
+            .eq('status', 'active')
+            .single() as { data: SubscriptionData | null, error: any }
 
-        if (subscriptionData) {
-          setSubscription({
-            status: subscriptionData.status,
-            plan_name: subscriptionData.subscription_plans.name,
-            end_date: subscriptionData.end_date
-          })
+          if (subscriptionError) {
+            console.log('Subscription fetch error:', subscriptionError)
+            // No active subscription found - this is normal
+          } else if (subscriptionData) {
+            console.log('Subscription data:', subscriptionData)
+            setSubscription({
+              status: subscriptionData.status,
+              plan_name: subscriptionData.subscription_plans?.[0]?.name || 'Unknown Plan',
+              end_date: subscriptionData.end_date
+            })
+          }
+        } catch (error) {
+          console.log('Subscription fetch exception:', error)
         }
 
       } catch (error) {

@@ -67,6 +67,58 @@ class User(BaseModel):
     email: str
     username: Optional[str] = None
 
+async def create_user_profile(user, supabase_client) -> User:
+    """
+    Create a new user profile in the database using service role access
+    """
+    try:
+        print(f"Creating profile for user: {user.id}")
+        
+        # Extract username from user metadata or generate one
+        username = None
+        if user.user_metadata and 'username' in user.user_metadata:
+            username = user.user_metadata['username']
+        else:
+            # Generate username from email
+            username = user.email.split('@')[0] if user.email else f"user_{user.id[:8]}"
+        
+        # Create profile using service role (bypasses RLS)
+        profile_data = {
+            'id': user.id,
+            'username': username,
+            'email': user.email,
+            'is_active': True
+        }
+        
+        print(f"Inserting profile data: {profile_data}")
+        
+        profile_response = supabase_client.table('user_profiles').insert(profile_data).execute()
+        
+        if profile_response.data:
+            print("SUCCESS: User profile created")
+            return User(
+                id=user.id,
+                email=user.email,
+                username=username
+            )
+        else:
+            print("WARNING: Profile creation returned no data")
+            return User(
+                id=user.id,
+                email=user.email,
+                username=username
+            )
+            
+    except Exception as e:
+        print(f"ERROR: Failed to create user profile: {e}")
+        print(f"Error type: {type(e).__name__}")
+        # Return user without profile if creation fails
+        return User(
+            id=user.id,
+            email=user.email,
+            username=None
+        )
+
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> User:
     """
     Validate JWT token and return user information
@@ -102,7 +154,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         print(f"SUCCESS: User authenticated - ID: {user_response.user.id}")
         print(f"User email: {user_response.user.email}")
         
-        # Get user profile from database - handle missing table gracefully
+        # Get user profile from database - create if doesn't exist
         try:
             print("Attempting to fetch user profile...")
             profile_response = supabase.table('user_profiles').select('*').eq('id', user_response.user.id).single().execute()
@@ -114,22 +166,16 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
                     email=user_response.user.email,
                     username=profile_response.data.get('username')
                 )
+            else:
+                # Profile doesn't exist - create it
+                print("No profile found - creating new profile...")
+                return await create_user_profile(user_response.user, supabase)
+                
         except Exception as profile_error:
-            print(f"Profile table error (likely missing): {profile_error}")
-            # Return user without profile if table doesn't exist
-            return User(
-                id=user_response.user.id,
-                email=user_response.user.email,
-                username=None
-            )
-        
-        # Fallback if no profile found
-        print("No profile found, using fallback user object")
-        return User(
-            id=user_response.user.id,
-            email=user_response.user.email,
-            username=None
-        )
+            print(f"Profile fetch error: {profile_error}")
+            # Profile doesn't exist - create it
+            print("Creating new profile due to fetch error...")
+            return await create_user_profile(user_response.user, supabase)
         
     except Exception as e:
         print(f"Authentication error: {e}")
