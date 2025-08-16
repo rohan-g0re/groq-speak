@@ -61,7 +61,7 @@ export function Dashboard() {
             console.log('Subscription fetch error:', subscriptionError)
             // No active subscription found - this is normal
           } else if (subscriptionData) {
-            console.log('Subscription data:', subscriptionData)
+            console.log('Subscription data:', subscriptionData) 
             setSubscription({
               status: subscriptionData.status,
               plan_name: subscriptionData.subscription_plans?.[0]?.name || 'Unknown Plan',
