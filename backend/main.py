@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from groq import Groq
 from typing import Optional, List
-from auth.middleware import get_current_user, require_subscription, User
+from backend.auth.middleware import get_current_user, require_subscription, User
 
 # Enhanced environment variable debugging
 print("=== ENVIRONMENT VARIABLES DEBUG ===")
