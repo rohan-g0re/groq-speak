@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { DefinitionRequest, DefinitionResponse } from '@/types/api';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib_supa/supabase';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 

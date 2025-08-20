@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib_supa/supabase'
 import { Link } from 'react-router-dom'
 
 interface UserProfile {
