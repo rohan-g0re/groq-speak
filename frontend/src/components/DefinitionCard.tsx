@@ -1,5 +1,5 @@
 import React from 'react';
-import { DefinitionResponse } from '../types/api';
+import { DefinitionResponse } from '@/types/api';
 
 interface DefinitionCardProps {
   definition: DefinitionResponse;
