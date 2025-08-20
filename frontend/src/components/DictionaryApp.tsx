@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { SearchForm } from './SearchForm';
 import { DefinitionCard } from './DefinitionCard';
 import { dictionaryApi } from '../services/api';
-import { DefinitionResponse } from '../types/api';
+import { DefinitionResponse } from '@/types/api';
 
 export function DictionaryApp() {
   const [definition, setDefinition] = useState<DefinitionResponse | null>(null);
