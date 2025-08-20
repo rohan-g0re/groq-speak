@@ -127,34 +127,8 @@ MOCK_RESPONSE = DefinitionResponse(
     confidence=0.95
 )
 
-async def log_feature_usage(user_id: str, feature_name: str, query: str):
-    """
-    Log feature usage to Supabase
-    """
-    try:
-        from supabase import create_client, Client
-        
-        supabase_url = os.getenv("SUPABASE_URL")
-        supabase_service_key = os.getenv("SUPABASE_SERVICE_KEY")
-        
-        if supabase_url and supabase_service_key:
-            supabase: Client = create_client(supabase_url, supabase_service_key)
-            
-            try:
-                supabase.table('feature_usage').insert({
-                    'user_id': user_id,
-                    'feature_name': feature_name,
-                    'query': query,
-                    'response_length': len(query),  # Placeholder
-                    'tokens_used': 0  # Placeholder
-                }).execute()
-            except Exception as table_error:
-                print(f"Feature usage table error (likely missing): {table_error}")
-                # Continue without logging if table doesn't exist
-        
-    except Exception as e:
-        print(f"Error logging usage: {e}")
-        # Continue without logging
+# Feature usage logging removed for lean schema
+# No longer needed for MVP
 
 @app.get("/")
 async def root():
@@ -176,10 +150,7 @@ async def define_text(
     print(f"Groq client available: {'YES' if groq_client else 'NO'}")
     
     try:
-        # Log usage
-        print("Attempting to log feature usage...")
-        await log_feature_usage(current_user.id, "dictionary", request.text)
-        print("Feature usage logged successfully")
+        # Feature usage logging removed for lean schema
         
         # Return mock response if requested or if Groq client is not available
         if request.use_mock or groq_client is None:
@@ -301,10 +272,7 @@ async def generate_joke(
     print(f"Groq client available: {'YES' if groq_client else 'NO'}")
     
     try:
-        # Log usage
-        print("Attempting to log feature usage...")
-        await log_feature_usage(current_user.id, "jokes", request.prompt)
-        print("Feature usage logged successfully")
+        # Feature usage logging removed for lean schema
         
         if groq_client is None:
             print("Groq client not available, returning mock joke")
@@ -364,8 +332,7 @@ async def generate_caption(
     Requires active subscription.
     """
     try:
-        # Log usage
-        await log_feature_usage(current_user.id, "captions", request.prompt)
+        # Feature usage logging removed for lean schema
         
         if groq_client is None:
             return {"caption": "Living my best life! ✨ #vibes #lifestyle"}

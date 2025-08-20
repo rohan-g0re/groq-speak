@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 interface UserProfile {
   username: string
   email: string
-  full_name: string | null
   created_at: string
 }
 
@@ -36,7 +35,7 @@ export function Dashboard() {
         // Fetch user profile
         const { data: profileData } = await supabase
           .from('user_profiles')
-          .select('username, email, full_name, created_at')
+          .select('username, email, created_at')
           .eq('id', user.id)
           .single()
 
