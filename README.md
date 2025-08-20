@@ -102,4 +102,4 @@ This application is deployed using a **hybrid approach** for optimal performance
 ## Security
 
 - **CORS Configuration**: Properly configured for cross-origin requests
-- **Input Validation**: Server-side validation with Pydantic
+- **Input Validation**: Server-side validation with Pydantic 
